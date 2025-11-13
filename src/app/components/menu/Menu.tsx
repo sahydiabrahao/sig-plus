@@ -5,9 +5,21 @@ import './Menu.scss';
 export function Menu() {
   return (
     <div className='menu'>
-      <ButtonIcon icon={ImportIcon} size='lg' />
-      <ButtonIcon icon={ExpandIcon} size='md' />
-      <ButtonIcon icon={CollapseIcon} size='md' />
+      <div className='menu__actions'>
+        <ButtonIcon icon={ImportIcon} size='lg' />
+        <ButtonIcon icon={ExpandIcon} size='lg' />
+        <ButtonIcon icon={CollapseIcon} size='lg' />
+      </div>
+      <div className='menu__label'>
+        <span className='menu__label-icon'>📁</span>
+        <span className='menu__label-text'>1-investigando</span>
+      </div>
+      <div className='menu__list'>
+        <div className='menu__item'>oc12-2025-31dp</div>
+        <div className='menu__item'>oc12-2025-31dp</div>
+        <div className='menu__item'>oc12-2025-31dp.pdf</div>
+        <div className='menu__item'>oc12-2025-31dp</div>
+      </div>
     </div>
   );
 }

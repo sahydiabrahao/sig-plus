@@ -1,7 +1,48 @@
+@use '@/styles/global' as *;
+
 .menu {
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: $textLight;
+  padding: 16px 12px;
+  gap: 16px;
+}
+
+.menu__actions {
+  display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 12px;
-  padding: 8px 12px;
+  align-items: center;
+}
+
+.menu__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: $fontSize;
+  font-weight: $fontWeightBold;
+  opacity: 0.9;
+}
+
+.menu__label-icon {
+  font-size: 16px;
+}
+
+.menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu__item {
+  font-size: $fontSize;
+  opacity: 0.9;
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: 4px;
+
+  &:hover {
+    background: $hoverLight;
+  }
 }
