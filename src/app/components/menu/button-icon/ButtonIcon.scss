@@ -1,0 +1,47 @@
+@use '@/styles/global' as *;
+
+.button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+
+  color: $buttonLight;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background: $buttonHoverLight;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &--sm {
+    width: 24px;
+    height: 24px;
+  }
+
+  &--md {
+    width: 32px;
+    height: 32px;
+  }
+
+  &--lg {
+    width: 40px;
+    height: 40px;
+  }
+}

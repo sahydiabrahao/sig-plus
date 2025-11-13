@@ -1,9 +1,6 @@
+import { ButtonIcon } from '@/app/components/menu/button-icon/ButtonIcon';
+import { ImportIcon } from '@/icons/import-icon';
+
 export function Menu() {
-  return (
-    <nav className='menu'>
-      <ul className='menu__list'>
-        <h1>Menu here</h1>
-      </ul>
-    </nav>
-  );
+  return <ButtonIcon icon={ImportIcon} size='lg' />;
 }
