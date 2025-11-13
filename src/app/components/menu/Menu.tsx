@@ -4,7 +4,11 @@ import { ImportIcon, ExpandIcon, CollapseIcon, FileJsonIcon } from '@/icons';
 import { TreePanel } from '@/app/components/tree-panel/TreePanel';
 import { useReadDirectoryHandle, useTreeState, useCreateJsonFile } from '@/hooks';
 
-export function Menu() {
+type MenuProps = {
+  onCaseJsonSelected?: (handle: FileSystemFileHandle) => void;
+};
+
+export function Menu({ onCaseJsonSelected }: MenuProps) {
   const { dirTree, setDirTree, rootHandle, importFolder } = useReadDirectoryHandle();
 
   const {
@@ -23,8 +27,13 @@ export function Menu() {
     setDirTree,
   });
 
-  async function handleOpenFile(handle: FileSystemFileHandle) {
+  async function handleFileClick(handle: FileSystemFileHandle) {
     const file = await handle.getFile();
+    const name = file.name.toLowerCase();
+    if (name.endsWith('.json')) {
+      onCaseJsonSelected?.(handle);
+      return;
+    }
     const url = URL.createObjectURL(file);
     window.open(url, '_blank');
     setTimeout(() => URL.revokeObjectURL(url), 5000);
@@ -47,7 +56,7 @@ export function Menu() {
             dirTree={dirTree}
             expanded={expanded}
             onToggle={handleToggle}
-            onFileClick={handleOpenFile}
+            onFileClick={handleFileClick}
             onDirClick={handleDirClick}
           />
         )}

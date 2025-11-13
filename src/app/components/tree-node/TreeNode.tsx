@@ -54,13 +54,6 @@ export function TreeNode({
     }
   };
 
-  async function handleFileClick(handle: FileSystemFileHandle) {
-    const file = await handle.getFile();
-    const url = URL.createObjectURL(file);
-    window.open(url, '_blank');
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-  }
-
   const DirectoryIcon = isExpanded ? FolderOpenedIcon : FolderClosedIcon;
   const FileIcon = !directory ? getFileIconByName(node.name) : null;
 
@@ -105,7 +98,8 @@ export function TreeNode({
               depth={depth + 1}
               expanded={expanded}
               onToggle={onToggle}
-              onFileClick={handleFileClick}
+              onFileClick={onFileClick}
+              onDirClick={onDirClick}
             />
           ))}
         </div>
