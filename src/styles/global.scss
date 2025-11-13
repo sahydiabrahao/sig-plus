@@ -1,0 +1,40 @@
+$backgroundDark: #111827;
+$backgroundLight: #f6f7fb;
+
+$textLight: #ffffff;
+$textDark: #111827;
+$textMutedLight: rgba(255, 255, 255, 0.72);
+
+$statusSuccess: #22c55e;
+$statusWarning: #facc15;
+$statusDanger: #ef4444;
+
+$fontSize: 12px;
+
+$fontWeightRegular: 400;
+$fontWeightBold: 700;
+
+.text {
+  font-size: $fontSize;
+  font-weight: $fontWeightRegular;
+}
+
+.text-bold {
+  font-size: $fontSize;
+  font-weight: $fontWeightBold;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: $backgroundDark;
+  color: $textLight;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
