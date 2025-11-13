@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "SigPlus",
+  "description": "Facilita a visualização da investigação policial.",
+  "version": "1.0.0",
+
+  "icons": {
+    "16": "assets/investigator-icon.png",
+    "48": "assets/investigator-icon.png",
+    "128": "assets/investigator-icon.png"
+  },
+
+  "action": {
+    "default_title": "SigPlus"
+  },
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "permissions": ["storage", "tabs"]
+}

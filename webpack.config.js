@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 
 export default {
   entry: {
-    background: './src/app/utils/background.ts',
+    background: './src/utils/background.ts',
     app: './src/app/app.tsx',
   },
   output: {
