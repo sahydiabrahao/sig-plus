@@ -16,6 +16,14 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "typescript-eslint": "^8.38.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
-    "@typescript-eslint/parser": "^8.38.0"
+    "@typescript-eslint/parser": "^8.38.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2"
+  },
+  "lint-staged": {
+    "src/**/*.ts?(x)": [
+      "eslint --fix",
+      "eslint"
+    ]
   }
 }
