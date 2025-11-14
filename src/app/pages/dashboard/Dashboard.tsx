@@ -7,6 +7,7 @@ import { RecordCard } from '@/app/components/record-card/RecordCard';
 import './Dashboard.scss';
 import { DashboardMessage } from '@/app/components/dashboard-massage/DashboardMessage';
 import { ButtonText } from '@/app/components/button-text/ButtonText';
+import { ButtonStatus } from '@/app/components/button-status/ButtonStatus';
 
 export default function Dashboard() {
   const { selectedCaseHandle } = useOutletContext<AppLayoutOutletContext>();
@@ -93,9 +94,9 @@ export default function Dashboard() {
         <div className='dashboard__header-row'>
           <h1 className='dashboard__title'>{editableCase.case.id}</h1>
           <div className='dashboard__header-actions'>
-            <ButtonText text='Novo Registro' variant='filled' size='sm' onClick={handleAddRecord} />
+            <ButtonText text='Adicionar' variant='filled' size='sm' onClick={handleAddRecord} />
             <ButtonText
-              text={saving ? 'Salvando...' : 'Salvar Alterações'}
+              text={saving ? 'Salvando...' : 'Salvar'}
               size='sm'
               variant='outline'
               disabled={saving || !editableCase || !hasChanges}
@@ -109,16 +110,7 @@ export default function Dashboard() {
         </div>
         <div className='dashboard__meta'>
           <label className='meta-field'>
-            <span className='meta-field__label'>Crime:</span>
-            <input
-              className='meta-field__input'
-              value={editableCase.case.crime}
-              onChange={(e) => handleMetadataChange('crime', e.target.value)}
-              size={Math.max((editableCase.case.crime.length || 1) + 1, 8)}
-            />
-          </label>
-          <label className='meta-field'>
-            <span className='meta-field__label'>Data:</span>
+            <h2 className='meta-field__label'>Data:</h2>
             <input
               className='meta-field__input'
               value={editableCase.case.date}
@@ -127,7 +119,16 @@ export default function Dashboard() {
               size={Math.max((editableCase.case.date.length || 1) + 1, 8)}
             />
             <label className='meta-field'>
-              <span className='meta-field__label'>Vítima:</span>
+              <h2 className='meta-field__label'>Crime:</h2>
+              <input
+                className='meta-field__input'
+                value={editableCase.case.crime}
+                onChange={(e) => handleMetadataChange('crime', e.target.value)}
+                size={Math.max((editableCase.case.crime.length || 1) + 1, 8)}
+              />
+            </label>
+            <label className='meta-field'>
+              <h2 className='meta-field__label'>Vítima:</h2>
               <input
                 className='meta-field__input'
                 value={editableCase.case.victim}
@@ -139,10 +140,12 @@ export default function Dashboard() {
         </div>
       </header>
       <section className='dashboard__section'>
-        <h2 className='dashboard__section-title'>Investigação</h2>
-        {editableCase.records.length === 0 && (
-          <p className='dashboard__muted'>Nenhuma informação disponível.</p>
-        )}
+        <div className='dashboard__section-header'>
+          <h2 className='dashboard__section-title'>Investigação</h2>
+          <div className='dashboard__section-actions'>
+            <ButtonStatus />
+          </div>
+        </div>
         <div className='dashboard__records'>
           {editableCase.records.map((record) => (
             <RecordCard

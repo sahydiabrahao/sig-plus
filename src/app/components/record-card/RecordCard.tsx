@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import type { CaseRecord, RecordStatus } from '@/types/json-default';
+import type { CaseRecord } from '@/types/json-default';
+import { ButtonText } from '@/app/components/button-text/ButtonText';
 import './RecordCard.scss';
 
 type RecordCardProps = {
@@ -7,28 +8,6 @@ type RecordCardProps = {
   onChange?: (updated: CaseRecord) => void;
   onDelete?: () => void;
 };
-
-const STATUS_LABEL: Record<RecordStatus, string> = {
-  waiting: 'Waiting',
-  pending: 'Pending',
-  answered: 'Answered',
-};
-
-// Utilitário interno
-function copy(text: string) {
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).catch(console.error);
-  } else {
-    const t = document.createElement('textarea');
-    t.value = text;
-    t.style.position = 'fixed';
-    t.style.opacity = '0';
-    document.body.appendChild(t);
-    t.select();
-    document.execCommand('copy');
-    document.body.removeChild(t);
-  }
-}
 
 export function RecordCard({ record, onChange, onDelete }: RecordCardProps) {
   const update = useCallback(
@@ -41,86 +20,46 @@ export function RecordCard({ record, onChange, onDelete }: RecordCardProps) {
   const handleTarget = (e: React.ChangeEvent<HTMLInputElement>) =>
     update({ target: e.target.value });
 
-  const handleDetails = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
-    update({ details: e.target.value });
+  function autoResize(textarea: HTMLTextAreaElement) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
 
-  const handleStatus = (status: RecordStatus) => update({ status });
+  const handleDetails = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    autoResize(e.target);
+    update({ details: e.target.value });
+  };
 
   return (
     <article className='record-card'>
-      {/* Cabeçalho */}
-      <header className='record-card__header'>
+      <div className='record-card__header'>
+        <h2 className='record-card__label'>#</h2>
         <input
           className='record-card__target'
           value={record.target}
           onChange={handleTarget}
-          placeholder='Dado investigado (ex: CPF, Telefone, PIX...)'
+          placeholder='Ex: CPF, Telefone, PIX...'
         />
-
-        <div className='record-card__status-group'>
-          {(['waiting', 'pending', 'answered'] as RecordStatus[]).map((s) => (
-            <button
-              key={s}
-              type='button'
-              className={`record-card__status-pill record-card__status-pill--${s} ${
-                record.status === s ? 'record-card__status-pill--active' : ''
-              }`}
-              onClick={() => handleStatus(s)}
-            >
-              {STATUS_LABEL[s]}
-            </button>
-          ))}
-        </div>
-      </header>
-
-      {/* Área de detalhes */}
-      <label className='record-card__label'>
-        Detalhes / diligências:
+        <ButtonText
+          text='🗑️'
+          size='sm'
+          variant='outline'
+          onClick={() => {
+            if (confirm('Deseja excluir?')) {
+              onDelete?.();
+            }
+          }}
+        />
+      </div>
+      <div className='record-card__section'>
         <textarea
           className='record-card__details'
           value={record.details}
           onChange={handleDetails}
-          placeholder={`Exemplo:
-[✔️] # DELOS: Nome Jão da Silva, CPF 123.123.123-00;
-[🕒] --DELOS(CPF): Aguardando ofício;
-[❌] # SITTEL: Fazer e enviar;
-`}
-          rows={4}
+          placeholder={'[✔️] # OFÍCIO: Nome;'}
+          rows={1}
         />
-      </label>
-
-      {/* Rodapé */}
-      <footer className='record-card__footer'>
-        <div className='record-card__snippet-group'>
-          <button
-            type='button'
-            className='record-card__snippet-btn'
-            onClick={() => copy('[🕒] --DELOS(CPF): ')}
-          >
-            🕒 Aguardando
-          </button>
-
-          <button
-            type='button'
-            className='record-card__snippet-btn'
-            onClick={() => copy('[❌] # SITTEL: ')}
-          >
-            ❌ A fazer
-          </button>
-
-          <button
-            type='button'
-            className='record-card__snippet-btn'
-            onClick={() => copy('[✔️] # DELOS: ')}
-          >
-            ✔️ Respondido
-          </button>
-        </div>
-
-        <button type='button' className='record-card__delete-btn' onClick={onDelete}>
-          Excluir registro
-        </button>
-      </footer>
+      </div>
     </article>
   );
 }

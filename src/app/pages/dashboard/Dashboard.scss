@@ -45,14 +45,8 @@
 }
 
 .meta-field__label {
-  font-weight: 400;
+  font-size: 14px;
   color: $textDark;
-}
-
-.meta-field__value {
-  font-weight: 600;
-  color: $textDark;
-  opacity: 1;
 }
 
 .meta-field__input {
@@ -84,6 +78,19 @@
 .dashboard__section-title {
   font-size: 14px;
   margin-bottom: 8px;
+}
+
+.dashboard__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.dashboard__section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .dashboard__muted {
