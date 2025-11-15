@@ -138,6 +138,15 @@ export default function Dashboard() {
             </label>
           </label>
         </div>
+        <label className='meta-field'>
+          <h2 className='meta-field__label'>Resumo:</h2>
+          <input
+            className='meta-field__input'
+            value={editableCase.case.resume}
+            onChange={(e) => handleMetadataChange('resume', e.target.value)}
+            size={Math.max((editableCase.case.resume.length || 1) + 1, 8)}
+          />
+        </label>
       </header>
       <section className='dashboard__section'>
         <div className='dashboard__section-header'>

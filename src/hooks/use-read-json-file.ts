@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { CaseJson } from '@/types/json-default';
+import { CaseJson, normalizeCaseJson } from '@/types/json-default';
 
 type UseReadJsonFileParams = {
   handle: FileSystemFileHandle | null;
@@ -34,10 +34,9 @@ export function useReadJsonFile({ handle }: UseReadJsonFileParams): UseReadJsonF
         const file = await handle.getFile();
         const text = await file.text();
         const parsed = JSON.parse(text) as CaseJson;
-
+        const normalized: CaseJson = normalizeCaseJson(parsed);
         if (cancelled) return;
-
-        setData(parsed);
+        setData(normalized);
         setLoading(false);
       } catch (err) {
         console.error('Erro ao carregar JSON do caso:', err);
