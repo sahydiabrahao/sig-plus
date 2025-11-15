@@ -88,6 +88,11 @@ export default function Dashboard() {
     });
   };
 
+  function autoResize(el: HTMLTextAreaElement) {
+    el.style.height = '0px';
+    el.style.height = el.scrollHeight + 'px';
+  }
+
   return (
     <div className='dashboard'>
       <header className='dashboard__header'>
@@ -140,11 +145,14 @@ export default function Dashboard() {
         </div>
         <label className='meta-field'>
           <h2 className='meta-field__label'>Resumo:</h2>
-          <input
-            className='meta-field__input'
+          <textarea
+            className='meta-field__text-area'
             value={editableCase.case.resume}
-            onChange={(e) => handleMetadataChange('resume', e.target.value)}
-            size={Math.max((editableCase.case.resume.length || 1) + 1, 8)}
+            onChange={(e) => {
+              handleMetadataChange('resume', e.target.value);
+              autoResize(e.target);
+            }}
+            rows={1}
           />
         </label>
       </header>
