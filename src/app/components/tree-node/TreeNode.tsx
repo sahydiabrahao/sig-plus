@@ -7,6 +7,9 @@ import {
   FolderClosedIcon,
   FileImageIcon,
   FilePdfIcon,
+  FileVideoIcon,
+  FileAudioIcon,
+  FileJsonIcon,
 } from '@/icons';
 import './TreeNode.scss';
 
@@ -25,11 +28,17 @@ function isDirectory(node: NodeItem): node is DirNode {
 
 function getFileIconByName(name: string): FC<{ size?: number; color?: string }> {
   const ext = name.split('.').pop()?.toLowerCase();
-  if (ext === 'pdf') {
-    return FilePdfIcon;
+  if (ext && ['mp4', 'mov', 'avi', 'wmv', 'mkv', 'flv', 'webm', 'm4v'].includes(ext)) {
+    return FileVideoIcon;
+  }
+  if (ext && ['mp3', 'wav', 'aac', 'ogg', 'flac', 'm4a', 'wma', 'aiff', 'amr'].includes(ext)) {
+    return FileAudioIcon;
   }
   if (ext && ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext)) {
     return FileImageIcon;
+  }
+  if (ext && ['json'].includes(ext)) {
+    return FileJsonIcon;
   }
   return FilePdfIcon;
 }

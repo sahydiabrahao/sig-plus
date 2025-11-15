@@ -7,3 +7,5 @@ export * from './file-pdf-icon';
 export * from './file-image-icon';
 export * from './file-json-icon';
 export * from './refresh-icon';
+export * from './file-video-icon';
+export * from './file-audio-icon';
