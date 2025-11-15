@@ -1,7 +1,7 @@
 {
-  "name": "sig-plus",
+  "name": "investigate-plus",
   "version": "1.0.0",
-  "description": "Facilita a visualização da investigação policial",
+  "description": "Auxilia na organização, leitura e edição de informações de forma simples e eficiente.",
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --mode development",

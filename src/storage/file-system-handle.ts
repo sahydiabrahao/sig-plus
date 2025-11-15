@@ -1,4 +1,4 @@
-const DB_NAME = 'sigplus-fs';
+const DB_NAME = 'investigate-fs';
 const STORE_NAME = 'handles';
 const KEY = 'rootDir';
 

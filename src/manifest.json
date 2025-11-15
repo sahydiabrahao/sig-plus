@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "SigPlus",
-  "description": "Facilita a visualização da investigação policial.",
+  "name": "Investigate+",
+  "description": "Auxilia na organização, leitura e edição de informações de forma simples e eficiente.",
   "version": "1.0.0",
 
   "icons": {
@@ -11,7 +11,7 @@
   },
 
   "action": {
-    "default_title": "SigPlus"
+    "default_title": "Investigate+"
   },
 
   "background": {
