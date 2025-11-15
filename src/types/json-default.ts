@@ -30,11 +30,11 @@ export function createNewCase(caseId: string): CaseJson {
   return {
     case: {
       id: caseId,
-      title: 'Titulo',
-      crime: 'Fato',
-      victim: 'Nome',
+      title: 'TÍTULO',
+      crime: 'FATO',
+      victim: 'NOME',
       date: 'XX/XX/XXXX',
-      resume: 'Resumo',
+      resume: 'RESUMO',
     },
     records: [createEmptyRecord()],
   };

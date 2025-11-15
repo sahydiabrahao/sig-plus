@@ -156,7 +156,7 @@ export function RecordCard({
           className='record-card__target'
           value={record.target}
           onChange={handleTarget}
-          placeholder='Ex: CPF, Telefone, PIX...'
+          placeholder='Ex: NOME...'
         />
 
         <div className='record-card__header-actions'>
@@ -218,7 +218,7 @@ export function RecordCard({
             onClick={updateActiveReference}
             onKeyUp={updateActiveReference}
             onSelect={updateActiveReference}
-            placeholder='[✔️] # OFÍCIO: Nome;'
+            placeholder='[✔️] # TÍTULO: Descrição;'
             rows={1}
           />
 
