@@ -2,7 +2,7 @@
 
 .record-card {
   position: relative;
-  padding: 2px 0px 2px 8px;
+  padding: 2px 0 2px 8px;
 }
 
 .record-card::before {
@@ -15,21 +15,12 @@
   border-radius: 6px;
   background: $textDark;
 }
+
 .record-card__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
-}
-
-.record-card__target {
-  flex: 1;
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  font-size: $fontSizeSm;
-  color: inherit;
+  width: 100%;
 }
 
 .record-card__label {
@@ -37,18 +28,94 @@
   color: $textDark;
 }
 
-.record-card__section {
-  padding-right: 12px;
-}
-
-.record-card__details {
-  width: 100%;
+.record-card__target {
+  flex: 1;
   padding: 6px 8px;
   font-size: $fontSizeSm;
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
   color: inherit;
-  resize: none;
+}
+
+.record-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.record-card__menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.record-card__menu-dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+
+  min-width: 150px;
+  padding: 6px 0;
+
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+
+  z-index: 30;
+}
+
+.record-card__menu-item {
+  width: 100%;
+  padding: 6px 12px;
+
+  font-size: $fontSizeSm;
+  color: $textLight;
+  text-align: left;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.record-card__menu-item--danger {
+  color: $textLight;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.15);
+  }
+}
+
+.record-card__section {
+  padding-right: 12px;
+  margin-top: 6px;
+}
+
+.record-card__details {
+  width: 100%;
+  padding: 6px 8px;
+
+  font-size: $fontSizeSm;
+  border-radius: 6px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+
+  color: inherit;
+  resize: vertical;
   overflow: hidden;
 }

@@ -93,6 +93,23 @@ export default function Dashboard() {
     el.style.height = el.scrollHeight + 'px';
   }
 
+  const handleMoveRecord = (fromIndex: number, toIndex: number) => {
+    setEditableCase((prev) => {
+      if (!prev) return prev;
+
+      const records = [...prev.records];
+      if (toIndex < 0 || toIndex >= records.length) return prev;
+
+      const [moved] = records.splice(fromIndex, 1);
+      records.splice(toIndex, 0, moved);
+
+      return {
+        ...prev,
+        records,
+      };
+    });
+  };
+
   return (
     <div className='dashboard'>
       <header className='dashboard__header'>
@@ -164,12 +181,20 @@ export default function Dashboard() {
           </div>
         </div>
         <div className='dashboard__records'>
-          {editableCase.records.map((record) => (
+          {editableCase.records.map((record, index) => (
             <RecordCard
               key={record.id}
               record={record}
               onChange={(updated) => handleRecordChange(record.id, updated)}
               onDelete={() => handleDeleteRecord(record.id)}
+              onMoveUp={index === 0 ? undefined : () => handleMoveRecord(index, index - 1)}
+              onMoveDown={
+                index === editableCase.records.length - 1
+                  ? undefined
+                  : () => handleMoveRecord(index, index + 1)
+              }
+              isFirst={index === 0}
+              isLast={index === editableCase.records.length - 1}
             />
           ))}
         </div>
