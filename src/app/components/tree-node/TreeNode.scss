@@ -18,6 +18,10 @@
     &:hover {
       background: $hoverLight;
     }
+
+    &__status {
+      margin-left: 4px;
+    }
   }
 
   &__expander {

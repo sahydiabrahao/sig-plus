@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import { useState } from 'react';
-import { useReadDirectoryHandle } from '@/hooks';
 import type { DirNode } from '@/utils/read-directory-tree';
 import { Menu } from '@/app/components/menu/Menu';
+import { useCaseContext } from '@/context/CaseContext';
 import './AppLayout.scss';
 
 export type AppLayoutOutletContext = {
@@ -11,8 +10,14 @@ export type AppLayoutOutletContext = {
 };
 
 export function AppLayout() {
-  const [selectedCaseHandle, setSelectedCaseHandle] = useState<FileSystemFileHandle | null>(null);
-  const { dirTree, setDirTree, rootHandle, importFolder } = useReadDirectoryHandle();
+  const {
+    dirTree,
+    setDirTree,
+    rootHandle,
+    importFolder,
+    selectedCaseHandle,
+    setSelectedCaseHandle,
+  } = useCaseContext();
 
   return (
     <div className='app-layout'>
@@ -25,6 +30,7 @@ export function AppLayout() {
           onCaseJsonSelected={setSelectedCaseHandle}
         />
       </aside>
+
       <main className='app-layout__content'>
         <Outlet context={{ selectedCaseHandle, dirTree }} />
       </main>

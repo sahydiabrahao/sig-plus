@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { AppLayoutOutletContext } from '@/app/layouts/AppLayout';
 import { useReadJsonFile, useWriteJsonFile } from '@/hooks';
 import {
   CaseJson,
@@ -18,9 +16,10 @@ import {
 } from '@/app/components';
 import './Dashboard.scss';
 import { findFileInTree } from '@/utils/find-file-in-tree';
+import { useCaseContext } from '@/context/CaseContext';
 
 export default function Dashboard() {
-  const { selectedCaseHandle, dirTree } = useOutletContext<AppLayoutOutletContext>();
+  const { selectedCaseHandle, dirTree, setStatus } = useCaseContext();
   const { data, loading, error } = useReadJsonFile({ handle: selectedCaseHandle });
   const [editableCase, setEditableCase] = useState<CaseJson | null>(null);
   const [originalCase, setOriginalCase] = useState<CaseJson | null>(null);
@@ -37,11 +36,15 @@ export default function Dashboard() {
     if (data) {
       setEditableCase(data);
       setOriginalCase(data);
+      if (selectedCaseHandle) {
+        const fileKey = selectedCaseHandle.name;
+        setStatus(fileKey, data.case.status);
+      }
     } else {
       setEditableCase(null);
       setOriginalCase(null);
     }
-  }, [data]);
+  }, [data, selectedCaseHandle, setStatus]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -62,8 +65,15 @@ export default function Dashboard() {
         Selecione um arquivo (.json).
       </DashboardMessage>
     );
-  if (loading || !editableCase) return <DashboardMessage>Carregando...</DashboardMessage>;
-  if (error) return <DashboardMessage className='dashboard__error'>{error}</DashboardMessage>;
+
+  if (loading || !editableCase) {
+    return <DashboardMessage>Carregando...</DashboardMessage>;
+  }
+
+  if (error) {
+    return <DashboardMessage className='dashboard__error'>{error}</DashboardMessage>;
+  }
+
   const handleRecordChange = (id: string, updated: CaseRecord) => {
     setEditableCase((prev) => {
       if (!prev) return prev;
@@ -149,18 +159,24 @@ export default function Dashboard() {
     }
   }
 
-  const handleStatusChange = (newStatus: CaseStatus) => {
-    setEditableCase((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        case: {
-          ...prev.case,
-          status: newStatus,
-        },
-      };
-    });
+  const handleStatusChange = async (newStatus: CaseStatus) => {
     setStatusOpen(false);
+    if (!editableCase) return;
+    const updatedCase: CaseJson = {
+      ...editableCase,
+      case: {
+        ...editableCase.case,
+        status: newStatus,
+      },
+    };
+    setEditableCase(updatedCase);
+    setOriginalCase(updatedCase);
+
+    if (selectedCaseHandle) {
+      const fileKey = selectedCaseHandle.name;
+      setStatus(fileKey, newStatus);
+    }
+    await save(updatedCase);
   };
 
   return (
@@ -228,6 +244,7 @@ export default function Dashboard() {
             />
           </div>
         </div>
+
         <div className='dashboard__meta'>
           <label className='meta-field'>
             <h2 className='meta-field__label'>Data:</h2>
@@ -258,6 +275,7 @@ export default function Dashboard() {
             </label>
           </label>
         </div>
+
         <label className='meta-field'>
           <h2 className='meta-field__label'>Resumo:</h2>
           <textarea
@@ -271,6 +289,7 @@ export default function Dashboard() {
           />
         </label>
       </header>
+
       <section className='dashboard__section'>
         <div className='dashboard__section-header'>
           <h2 className='dashboard__section-title'>Investigação</h2>

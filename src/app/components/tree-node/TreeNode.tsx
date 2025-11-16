@@ -12,6 +12,9 @@ import {
   FileJsonIcon,
 } from '@/icons';
 import './TreeNode.scss';
+import { ButtonStatus } from '@/app/components';
+import { useCaseContext } from '@/context/CaseContext';
+import { CaseStatus } from '@/types/json-default';
 
 type TreeNodeProps = {
   node: NodeItem;
@@ -53,6 +56,7 @@ export function TreeNode({
 }: TreeNodeProps) {
   const directory = isDirectory(node);
   const isExpanded = directory && expanded.has(node.path);
+  const { getStatus } = useCaseContext();
 
   const handleLabelClick = () => {
     if (directory) {
@@ -65,6 +69,21 @@ export function TreeNode({
 
   const DirectoryIcon = isExpanded ? FolderOpenedIcon : FolderClosedIcon;
   const FileIcon = !directory ? getFileIconByName(node.name) : null;
+
+  let folderStatus: CaseStatus | null = null;
+
+  if (directory) {
+    const baseName = node.name;
+    const caseJsonChild = node.children.find(
+      (child) =>
+        child.type === 'file' && child.name.toLowerCase() === `${baseName.toLowerCase()}.json`
+    );
+
+    if (caseJsonChild) {
+      const fileKey = caseJsonChild.name;
+      folderStatus = getStatus(fileKey);
+    }
+  }
 
   return (
     <div className='tree-node' role='treeitem' aria-expanded={directory ? isExpanded : undefined}>
@@ -93,6 +112,7 @@ export function TreeNode({
             FileIcon && <FileIcon size={16} color='currentColor' />
           )}
         </span>
+
         <button
           type='button'
           className='tree-node__label'
@@ -101,6 +121,12 @@ export function TreeNode({
         >
           {node.name}
         </button>
+
+        {directory && folderStatus !== null && (
+          <span className='tree-node__status'>
+            <ButtonStatus status={folderStatus} size='md' />
+          </span>
+        )}
       </div>
 
       {directory && isExpanded && (
