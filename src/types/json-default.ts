@@ -1,3 +1,4 @@
+export type CaseStatus = 'null' | 'waiting' | 'completed' | 'urgent';
 export interface CaseRecord {
   id: string;
   target: string;
@@ -11,6 +12,7 @@ export interface CaseMetadata {
   victim: string;
   date: string;
   resume: string;
+  status: CaseStatus;
 }
 
 export interface CaseJson {
@@ -35,6 +37,7 @@ export function createNewCase(caseId: string): CaseJson {
       victim: 'NOME',
       date: 'XX/XX/XXXX',
       resume: 'RESUMO',
+      status: 'null',
     },
     records: [createEmptyRecord()],
   };

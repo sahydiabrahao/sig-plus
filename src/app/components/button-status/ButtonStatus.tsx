@@ -1,27 +1,50 @@
-import { ButtonText } from '@/app/components/button-text/ButtonText';
+import { FC } from 'react';
+import { CaseStatus } from '@/types/json-default';
+import { WaitingIcon, CompletedIcon, UrgentIcon, NullIcon } from '@/icons';
 import './ButtonStatus.scss';
 
-function copy(text: string) {
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).catch(console.error);
-  } else {
-    const t = document.createElement('textarea');
-    t.value = text;
-    t.style.position = 'fixed';
-    t.style.opacity = '0';
-    document.body.appendChild(t);
-    t.select();
-    document.execCommand('copy');
-    document.body.removeChild(t);
-  }
+interface ButtonSatatusProps {
+  status: CaseStatus;
+  onClick?: () => void;
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
 }
 
-export function ButtonStatus() {
+const sizeMap = {
+  sm: 20,
+  md: 24,
+  lg: 28,
+} as const;
+
+const iconMap: Record<CaseStatus, FC<{ size: number; color?: string }>> = {
+  null: NullIcon,
+  waiting: WaitingIcon,
+  completed: CompletedIcon,
+  urgent: UrgentIcon,
+};
+
+const symbolColorMap: Record<CaseStatus, string> = {
+  null: '#111827',
+  waiting: 'white',
+  completed: 'white',
+  urgent: 'white',
+};
+
+export function ButtonStatus({
+  status,
+  onClick,
+  size = 'md',
+  disabled = false,
+}: ButtonSatatusProps) {
+  const Icon = iconMap[status];
+
   return (
-    <div className='button-status'>
-      <ButtonText text='❌' size='sm' variant='filled' onClick={() => copy('[❌]')} />
-      <ButtonText text='🕒' size='sm' variant='filled' onClick={() => copy('[🕒]')} />
-      <ButtonText text='✔️' size='sm' variant='filled' onClick={() => copy('[✔️]')} />
-    </div>
+    <button
+      className={`button-status button-status--${size} button-status--${status}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <Icon size={sizeMap[size]} color={symbolColorMap[status]} />
+    </button>
   );
 }

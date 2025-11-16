@@ -111,20 +111,24 @@ export function RecordCard({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menuOpen]);
+
   const handleDelete = () => {
     if (confirm('Deseja excluir este registro?')) {
       onDelete?.();
       setMenuOpen(false);
     }
   };
+
   const handleMoveUpClick = () => {
     if (onMoveUp && !isFirst) onMoveUp();
     setMenuOpen(false);
   };
+
   const handleMoveDownClick = () => {
     if (onMoveDown && !isLast) onMoveDown();
     setMenuOpen(false);
   };
+
   const handleOpenReference = () => {
     if (activeRef && onOpenReference) {
       onOpenReference(activeRef.fileName);

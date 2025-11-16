@@ -19,6 +19,57 @@
   width: 100%;
 }
 
+.dashboard__header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard__status-wrapper {
+  position: relative;
+}
+
+.dashboard__status-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 6px;
+  padding: 4px 0;
+  min-width: 160px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  z-index: 10;
+}
+
+.dashboard__status-item {
+  width: 100%;
+  padding: 6px 12px;
+
+  font-size: $fontSizeSm;
+  color: $textLight;
+  text-align: left;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
 .dashboard__header-actions {
   display: flex;
   align-items: center;

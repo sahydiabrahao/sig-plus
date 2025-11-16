@@ -9,3 +9,7 @@ export * from './file-json-icon';
 export * from './refresh-icon';
 export * from './file-video-icon';
 export * from './file-audio-icon';
+export * from './urgent-icon';
+export * from './waiting-icon';
+export * from './completed-icon';
+export * from './null-icon';

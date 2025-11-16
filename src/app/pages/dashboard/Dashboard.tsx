@@ -1,13 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { AppLayoutOutletContext } from '@/app/layouts/AppLayout';
 import { useReadJsonFile, useWriteJsonFile } from '@/hooks';
-import { CaseJson, CaseMetadata, CaseRecord, createEmptyRecord } from '@/types/json-default';
-import { RecordCard } from '@/app/components/record-card/RecordCard';
+import {
+  CaseJson,
+  CaseMetadata,
+  CaseRecord,
+  CaseStatus,
+  createEmptyRecord,
+} from '@/types/json-default';
+import {
+  DashboardMessage,
+  ButtonStatus,
+  ButtonText,
+  ButtonCopy,
+  RecordCard,
+} from '@/app/components';
 import './Dashboard.scss';
-import { DashboardMessage } from '@/app/components/dashboard-massage/DashboardMessage';
-import { ButtonText } from '@/app/components/button-text/ButtonText';
-import { ButtonStatus } from '@/app/components/button-status/ButtonStatus';
 import { findFileInTree } from '@/utils/find-file-in-tree';
 
 export default function Dashboard() {
@@ -16,6 +25,8 @@ export default function Dashboard() {
   const [editableCase, setEditableCase] = useState<CaseJson | null>(null);
   const [originalCase, setOriginalCase] = useState<CaseJson | null>(null);
   const { save, saving } = useWriteJsonFile({ handle: selectedCaseHandle });
+  const [statusOpen, setStatusOpen] = useState(false);
+  const statusRef = useRef<HTMLDivElement | null>(null);
 
   const hasChanges =
     editableCase && originalCase
@@ -31,6 +42,20 @@ export default function Dashboard() {
       setOriginalCase(null);
     }
   }, [data]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (statusRef.current && !statusRef.current.contains(event.target as Node)) {
+        setStatusOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   if (!selectedCaseHandle)
     return (
       <DashboardMessage className='dashboard__empty'>
@@ -87,6 +112,7 @@ export default function Dashboard() {
     el.style.height = '0px';
     el.style.height = el.scrollHeight + 'px';
   }
+
   const handleMoveRecord = (fromIndex: number, toIndex: number) => {
     setEditableCase((prev) => {
       if (!prev) return prev;
@@ -123,11 +149,70 @@ export default function Dashboard() {
     }
   }
 
+  const handleStatusChange = (newStatus: CaseStatus) => {
+    setEditableCase((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        case: {
+          ...prev.case,
+          status: newStatus,
+        },
+      };
+    });
+    setStatusOpen(false);
+  };
+
   return (
     <div className='dashboard'>
       <header className='dashboard__header'>
         <div className='dashboard__header-row'>
-          <h1 className='dashboard__title'>{editableCase.case.id}</h1>
+          <div className='dashboard__header-title-group'>
+            <div className='dashboard__status-wrapper' ref={statusRef}>
+              <ButtonStatus
+                status={editableCase.case.status}
+                size='lg'
+                onClick={() => setStatusOpen((open) => !open)}
+              />
+
+              {statusOpen && (
+                <div className='dashboard__status-dropdown'>
+                  <button
+                    className='dashboard__status-item'
+                    onClick={() => handleStatusChange('null')}
+                  >
+                    <ButtonStatus status='null' size='md' />
+                    Sem status
+                  </button>
+
+                  <button
+                    className='dashboard__status-item'
+                    onClick={() => handleStatusChange('waiting')}
+                  >
+                    <ButtonStatus status='waiting' size='md' />
+                    Aguardando
+                  </button>
+
+                  <button
+                    className='dashboard__status-item'
+                    onClick={() => handleStatusChange('urgent')}
+                  >
+                    <ButtonStatus status='urgent' size='md' />
+                    Urgente
+                  </button>
+
+                  <button
+                    className='dashboard__status-item'
+                    onClick={() => handleStatusChange('completed')}
+                  >
+                    <ButtonStatus status='completed' size='md' />
+                    Concluído
+                  </button>
+                </div>
+              )}
+            </div>
+            <h1 className='dashboard__title'>{editableCase.case.id}</h1>
+          </div>
           <div className='dashboard__header-actions'>
             <ButtonText text='Adicionar' variant='filled' size='sm' onClick={handleAddRecord} />
             <ButtonText
@@ -190,7 +275,7 @@ export default function Dashboard() {
         <div className='dashboard__section-header'>
           <h2 className='dashboard__section-title'>Investigação</h2>
           <div className='dashboard__section-actions'>
-            <ButtonStatus />
+            <ButtonCopy />
           </div>
         </div>
         <div className='dashboard__records'>

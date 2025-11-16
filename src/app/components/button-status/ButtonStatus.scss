@@ -1,5 +1,65 @@
+@use '@/styles/global' as *;
+
 .button-status {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  padding: 2px;
+  border-radius: 4px;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+
+  color: $buttonLight;
+
+  &:hover {
+    background: $hoverLight;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &--sm {
+    width: 12px;
+    height: 12px;
+  }
+
+  &--md {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--lg {
+    width: 28px;
+    height: 28px;
+  }
+
+  &--none {
+    color: #c9ccd1;
+  }
+
+  &--urgent {
+    color: #ff6b6b;
+  }
+
+  &--completed {
+    color: #16c784;
+  }
+
+  &--waiting {
+    color: #5ed0fa;
+  }
 }
