@@ -1,6 +1,4 @@
 export * from './import-icon';
-export * from './expand-icon';
-export * from './collapse-icon';
 export * from './folder-closed-icon';
 export * from './folder-opened-icon';
 export * from './file-pdf-icon';
@@ -13,3 +11,6 @@ export * from './urgent-icon';
 export * from './waiting-icon';
 export * from './completed-icon';
 export * from './null-icon';
+export * from './list-icon';
+export * from './collapse-icon';
+export * from './expand-icon';

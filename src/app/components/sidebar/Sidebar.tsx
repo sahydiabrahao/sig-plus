@@ -1,6 +1,5 @@
-// Sidebar.tsx
 import { ButtonIcon } from '@/app/components/button-icon/ButtonIcon';
-import { ImportIcon, FileJsonIcon, RefreshIcon } from '@/icons';
+import { ImportIcon, FileJsonIcon, RefreshIcon, ListIcon } from '@/icons';
 import { useCaseContext } from '@/context/CaseContext';
 import { useCreateJsonFile } from '@/hooks';
 import { scanDirectoryTree } from '@/utils/read-directory-tree';
@@ -24,9 +23,10 @@ export function Sidebar() {
 
   return (
     <div className='sidebar'>
+      <ButtonIcon icon={ListIcon} size='lg' />
+      <ButtonIcon icon={RefreshIcon} onClick={handleRefreshTree} size='lg' />
       <ButtonIcon icon={ImportIcon} onClick={importFolder} size='lg' />
       <ButtonIcon icon={FileJsonIcon} onClick={createJsonFile} size='lg' />
-      <ButtonIcon icon={RefreshIcon} onClick={handleRefreshTree} size='lg' />
     </div>
   );
 }

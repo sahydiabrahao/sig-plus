@@ -57,12 +57,10 @@ export function TreeNode({
   const directory = isDirectory(node);
   const isExpanded = directory && expanded.has(node.path);
 
-  // 🔥 agora pegamos também o setCurrentDirPath
   const { getStatus, setCurrentDirPath } = useCaseContext();
 
   const handleLabelClick = () => {
     if (directory) {
-      // 🔥 aqui atualiza a pasta atual
       setCurrentDirPath(node.path);
 
       onDirClick?.(node);
@@ -98,7 +96,7 @@ export function TreeNode({
             type='button'
             className='tree-node__expander'
             onClick={() => {
-              setCurrentDirPath(node.path); // opcional, se quiser que o expander tb selecione
+              setCurrentDirPath(node.path);
               onToggle(node.path);
             }}
             aria-label={isExpanded ? 'Collapse folder' : 'Expand folder'}
