@@ -26,6 +26,9 @@ type CaseContextValue = {
   statusByFile: CaseStatusMap;
   getStatus: (fileKey: string) => CaseStatus;
   setStatus: (fileKey: string, status: CaseStatus) => void;
+
+  currentDirPath: string | null;
+  setCurrentDirPath: (path: string | null) => void;
 };
 
 const CaseContext = createContext<CaseContextValue | null>(null);
@@ -37,6 +40,8 @@ export function CaseProvider({ children }: { children: ReactNode }) {
 
   const [statusByFile, setStatusByFile] = useState<CaseStatusMap>({});
 
+  const [currentDirPath, setCurrentDirPath] = useState<string | null>(null);
+
   useEffect(() => {
     (async () => {
       try {
@@ -47,6 +52,12 @@ export function CaseProvider({ children }: { children: ReactNode }) {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (dirTree && !currentDirPath) {
+      setCurrentDirPath(dirTree.path);
+    }
+  }, [dirTree, currentDirPath]);
 
   const getStatus = useCallback(
     (fileKey: string): CaseStatus => {
@@ -77,16 +88,18 @@ export function CaseProvider({ children }: { children: ReactNode }) {
       statusByFile,
       getStatus,
       setStatus,
+      currentDirPath,
+      setCurrentDirPath,
     }),
     [
       rootHandle,
       dirTree,
-      setDirTree,
       importFolder,
       selectedCaseHandle,
       statusByFile,
       getStatus,
       setStatus,
+      currentDirPath,
     ]
   );
 

@@ -8,3 +8,4 @@ export * from './record-card/RecordCard';
 export * from './tree-node/TreeNode';
 export * from './tree-panel/TreePanel';
 export * from './tree-view/TreeView';
+export * from './sidebar/Sidebar';

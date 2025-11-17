@@ -1,70 +1,35 @@
-import type { Dispatch, SetStateAction } from 'react';
 import './Menu.scss';
-import { ButtonIcon } from '@/app/components/button-icon/ButtonIcon';
-import { ImportIcon, ExpandIcon, CollapseIcon, FileJsonIcon, RefreshIcon } from '@/icons';
 import { TreePanel } from '@/app/components/tree-panel/TreePanel';
-import { useTreeState, useCreateJsonFile } from '@/hooks';
-import { scanDirectoryTree, type DirNode } from '@/utils/read-directory-tree';
+import { useTreeState } from '@/hooks';
+import type { DirNode } from '@/utils/read-directory-tree';
+import { useCaseContext } from '@/context/CaseContext';
 
-type MenuProps = {
-  onCaseJsonSelected?: (handle: FileSystemFileHandle) => void;
-  dirTree: DirNode | null;
-  setDirTree: Dispatch<SetStateAction<DirNode | null>>;
-  rootHandle: FileSystemDirectoryHandle | null;
-  importFolder: () => Promise<void>;
-};
+export function Menu() {
+  const { dirTree, setSelectedCaseHandle, setCurrentDirPath } = useCaseContext();
 
-export function Menu({
-  onCaseJsonSelected,
-  dirTree,
-  setDirTree,
-  rootHandle,
-  importFolder,
-}: MenuProps) {
-  const {
-    expanded,
-    currentDirPath,
-    handleToggle,
-    handleExpandAll,
-    handleCollapseAll,
-    handleDirClick,
-  } = useTreeState(dirTree);
-
-  const { createJsonFile } = useCreateJsonFile({
-    rootHandle,
-    dirTree,
-    currentDirPath,
-    setDirTree,
-  });
-
-  async function handleRefreshTree() {
-    if (!rootHandle) return;
-    const updatedTree = await scanDirectoryTree(rootHandle);
-    setDirTree(updatedTree);
-  }
+  const { expanded, handleToggle, handleDirClick } = useTreeState(dirTree);
 
   async function handleFileClick(handle: FileSystemFileHandle) {
     const file = await handle.getFile();
     const name = file.name.toLowerCase();
+
     if (name.endsWith('.json')) {
-      onCaseJsonSelected?.(handle);
+      setSelectedCaseHandle?.(handle);
       return;
     }
+
     const url = URL.createObjectURL(file);
     window.open(url, '_blank');
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   }
 
+  function handleDirClickWithContext(node: DirNode) {
+    setCurrentDirPath(node.path);
+    handleDirClick(node);
+  }
+
   return (
     <div className='menu'>
-      <div className='menu__actions'>
-        <ButtonIcon icon={ImportIcon} onClick={importFolder} size='lg' />
-        <ButtonIcon icon={FileJsonIcon} onClick={createJsonFile} size='lg' />
-        <ButtonIcon icon={RefreshIcon} onClick={handleRefreshTree} size='lg' />
-        <ButtonIcon icon={ExpandIcon} onClick={handleExpandAll} size='lg' />
-        <ButtonIcon icon={CollapseIcon} onClick={handleCollapseAll} size='lg' />
-      </div>
-
       <div className='menu__list'>
         {!dirTree && <div className='menu__item menu__item--empty'>Nenhuma pasta importada</div>}
 
@@ -74,7 +39,7 @@ export function Menu({
             expanded={expanded}
             onToggle={handleToggle}
             onFileClick={handleFileClick}
-            onDirClick={handleDirClick}
+            onDirClick={handleDirClickWithContext}
           />
         )}
       </div>

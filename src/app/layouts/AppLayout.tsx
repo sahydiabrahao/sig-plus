@@ -1,38 +1,20 @@
 import { Outlet } from 'react-router-dom';
-import type { DirNode } from '@/utils/read-directory-tree';
-import { Menu } from '@/app/components/menu/Menu';
-import { useCaseContext } from '@/context/CaseContext';
+import { Menu, Sidebar } from '@/app/components';
 import './AppLayout.scss';
 
-export type AppLayoutOutletContext = {
-  selectedCaseHandle: FileSystemFileHandle | null;
-  dirTree: DirNode | null;
-};
-
 export function AppLayout() {
-  const {
-    dirTree,
-    setDirTree,
-    rootHandle,
-    importFolder,
-    selectedCaseHandle,
-    setSelectedCaseHandle,
-  } = useCaseContext();
-
   return (
     <div className='app-layout'>
       <aside className='app-layout__sidebar'>
-        <Menu
-          dirTree={dirTree}
-          setDirTree={setDirTree}
-          rootHandle={rootHandle}
-          importFolder={importFolder}
-          onCaseJsonSelected={setSelectedCaseHandle}
-        />
+        <Sidebar />
+      </aside>
+
+      <aside className='app-layout__menu'>
+        <Menu />
       </aside>
 
       <main className='app-layout__content'>
-        <Outlet context={{ selectedCaseHandle, dirTree }} />
+        <Outlet />
       </main>
     </div>
   );

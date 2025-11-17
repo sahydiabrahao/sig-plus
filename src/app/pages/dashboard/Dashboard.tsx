@@ -20,10 +20,17 @@ import { useCaseContext } from '@/context/CaseContext';
 
 export default function Dashboard() {
   const { selectedCaseHandle, dirTree, setStatus } = useCaseContext();
-  const { data, loading, error } = useReadJsonFile({ handle: selectedCaseHandle });
+
+  const { data, loading, error } = useReadJsonFile({
+    handle: selectedCaseHandle,
+  });
+
+  const { save, saving } = useWriteJsonFile({
+    handle: selectedCaseHandle,
+  });
+
   const [editableCase, setEditableCase] = useState<CaseJson | null>(null);
   const [originalCase, setOriginalCase] = useState<CaseJson | null>(null);
-  const { save, saving } = useWriteJsonFile({ handle: selectedCaseHandle });
   const [statusOpen, setStatusOpen] = useState(false);
   const statusRef = useRef<HTMLDivElement | null>(null);
 
@@ -36,6 +43,7 @@ export default function Dashboard() {
     if (data) {
       setEditableCase(data);
       setOriginalCase(data);
+
       if (selectedCaseHandle) {
         const fileKey = selectedCaseHandle.name;
         setStatus(fileKey, data.case.status);
@@ -54,17 +62,16 @@ export default function Dashboard() {
     }
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  if (!selectedCaseHandle)
+  if (!selectedCaseHandle) {
     return (
       <DashboardMessage className='dashboard__empty'>
         Selecione um arquivo (.json).
       </DashboardMessage>
     );
+  }
 
   if (loading || !editableCase) {
     return <DashboardMessage>Carregando...</DashboardMessage>;
@@ -75,47 +82,50 @@ export default function Dashboard() {
   }
 
   const handleRecordChange = (id: string, updated: CaseRecord) => {
-    setEditableCase((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        records: prev.records.map((record) => (record.id === id ? updated : record)),
-      };
-    });
+    setEditableCase((prev) =>
+      prev
+        ? {
+            ...prev,
+            records: prev.records.map((record) => (record.id === id ? updated : record)),
+          }
+        : prev
+    );
   };
 
   const handleAddRecord = () => {
-    setEditableCase((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        records: [...prev.records, createEmptyRecord()],
-      };
-    });
+    setEditableCase((prev) =>
+      prev
+        ? {
+            ...prev,
+            records: [...prev.records, createEmptyRecord()],
+          }
+        : prev
+    );
   };
 
   const handleDeleteRecord = (id: string) => {
-    setEditableCase((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        records: prev.records.filter((r) => r.id !== id),
-      };
-    });
+    setEditableCase((prev) =>
+      prev
+        ? {
+            ...prev,
+            records: prev.records.filter((r) => r.id !== id),
+          }
+        : prev
+    );
   };
 
   const handleMetadataChange = (key: keyof CaseMetadata, value: string) => {
-    setEditableCase((prev) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        case: {
-          ...prev.case,
-          [key]: value,
-        },
-      };
-    });
+    setEditableCase((prev) =>
+      prev
+        ? {
+            ...prev,
+            case: {
+              ...prev.case,
+              [key]: value,
+            },
+          }
+        : prev
+    );
   };
 
   function autoResize(el: HTMLTextAreaElement) {
@@ -126,14 +136,14 @@ export default function Dashboard() {
   const handleMoveRecord = (fromIndex: number, toIndex: number) => {
     setEditableCase((prev) => {
       if (!prev) return prev;
+
       const records = [...prev.records];
       if (toIndex < 0 || toIndex >= records.length) return prev;
+
       const [moved] = records.splice(fromIndex, 1);
       records.splice(toIndex, 0, moved);
-      return {
-        ...prev,
-        records,
-      };
+
+      return { ...prev, records };
     });
   };
 
@@ -142,11 +152,13 @@ export default function Dashboard() {
       alert('Nenhuma pasta carregada.');
       return;
     }
+
     const handle = findFileInTree(dirTree, fileName);
     if (!handle) {
       alert(`Arquivo não encontrado: ${fileName}`);
       return;
     }
+
     try {
       const file = await handle.getFile();
       const url = URL.createObjectURL(file);
@@ -162,6 +174,7 @@ export default function Dashboard() {
   const handleStatusChange = async (newStatus: CaseStatus) => {
     setStatusOpen(false);
     if (!editableCase) return;
+
     const updatedCase: CaseJson = {
       ...editableCase,
       case: {
@@ -169,6 +182,7 @@ export default function Dashboard() {
         status: newStatus,
       },
     };
+
     setEditableCase(updatedCase);
     setOriginalCase(updatedCase);
 
@@ -176,6 +190,7 @@ export default function Dashboard() {
       const fileKey = selectedCaseHandle.name;
       setStatus(fileKey, newStatus);
     }
+
     await save(updatedCase);
   };
 
@@ -227,8 +242,10 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+
             <h1 className='dashboard__title'>{editableCase.case.id}</h1>
           </div>
+
           <div className='dashboard__header-actions'>
             <ButtonText text='Adicionar' variant='filled' size='sm' onClick={handleAddRecord} />
             <ButtonText
@@ -255,22 +272,22 @@ export default function Dashboard() {
               placeholder='XX/XX/XXXX'
               size={Math.max((editableCase.case.date.length || 1) + 1, 8)}
             />
+
             <label className='meta-field'>
               <h2 className='meta-field__label'>Crime:</h2>
               <input
                 className='meta-field__input'
                 value={editableCase.case.crime}
                 onChange={(e) => handleMetadataChange('crime', e.target.value)}
-                size={Math.max((editableCase.case.crime.length || 1) + 1, 8)}
               />
             </label>
+
             <label className='meta-field'>
               <h2 className='meta-field__label'>Vítima:</h2>
               <input
                 className='meta-field__input'
                 value={editableCase.case.victim}
                 onChange={(e) => handleMetadataChange('victim', e.target.value)}
-                size={Math.max((editableCase.case.victim.length || 1) + 1, 8)}
               />
             </label>
           </label>
@@ -297,6 +314,7 @@ export default function Dashboard() {
             <ButtonCopy />
           </div>
         </div>
+
         <div className='dashboard__records'>
           {editableCase.records.map((record, index) => (
             <RecordCard

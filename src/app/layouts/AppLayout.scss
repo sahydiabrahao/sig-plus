@@ -1,21 +1,33 @@
 @use '@/styles/global' as *;
 
 .app-layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: 70px 300px 1fr;
   height: 100vh;
   width: 100%;
   background: $backgroundLight;
 
   &__sidebar {
-    width: 300px;
-    color: $textLight;
     background: $backgroundDark;
+    color: $textLight;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding-top: 1rem;
+    gap: 1.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__menu {
+    background: $backgroundDark;
+    color: $textLight;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   &__content {
-    flex: 1;
     padding: 1.5rem;
     overflow-y: auto;
     color: $textDark;
