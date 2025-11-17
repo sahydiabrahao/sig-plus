@@ -20,6 +20,21 @@ export interface CaseJson {
   records: CaseRecord[];
 }
 
+export type CaseSummary = {
+  id: string;
+  title: string;
+  crime: string;
+  victim: string;
+  date: string;
+  resume: string;
+  status: CaseStatus;
+
+  folderPath: string;
+  folderName: string;
+  fileName: string;
+  handle: FileSystemFileHandle;
+};
+
 export function createEmptyRecord(): CaseRecord {
   return {
     id: crypto.randomUUID(),
