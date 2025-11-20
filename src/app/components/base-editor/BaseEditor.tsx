@@ -27,22 +27,21 @@ type Props = {
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const [showColors, setShowColors] = useState(false);
-
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const [showFormats, setShowFormats] = useState(false);
+  const toolbarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node)) {
         setShowColors(false);
+        setShowFormats(false);
       }
     }
-
-    if (showColors) {
+    if (showColors || showFormats) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showColors]);
+  }, [showColors, showFormats]);
 
   const applyColor = (color: string) => {
     editor.update(() => {
@@ -51,37 +50,73 @@ function ToolbarPlugin() {
         $patchStyleText(selection, { color });
       }
     });
-    setShowColors(false);
+  };
+  const toggleFormat = (format: 'bold' | 'italic' | 'underline') => {
+    editor.dispatchCommand(FORMAT_TEXT_COMMAND, format);
   };
 
   return (
-    <div className='lexical-toolbar-vertical'>
-      <button onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')}>
-        <b>B</b>
-      </button>
-
-      <button onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')}>
-        <i>I</i>
-      </button>
-
-      <button onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')}>U</button>
-
-      <div className='color-dropdown' ref={dropdownRef}>
+    <div className='lexical-toolbar-vertical' ref={toolbarRef}>
+      <div className='color-dropdown format-dropdown'>
+        <button
+          type='button'
+          className='color-trigger format-trigger'
+          onClick={() => {
+            setShowFormats((prev) => !prev);
+            setShowColors(false);
+          }}
+        >
+          <span>𝘼</span>
+        </button>
+        {showFormats && (
+          <div className='color-menu format-menu'>
+            <button type='button' onClick={() => toggleFormat('bold')}>
+              <b>B</b>
+            </button>
+            <button type='button' onClick={() => toggleFormat('italic')}>
+              <i>I</i>
+            </button>
+            <button type='button' onClick={() => toggleFormat('underline')}>
+              U
+            </button>
+          </div>
+        )}
+      </div>
+      <div className='color-dropdown'>
         <button
           className='color-trigger'
           type='button'
-          onClick={() => setShowColors((prev) => !prev)}
+          onClick={() => {
+            setShowColors((prev) => !prev);
+            setShowFormats(false);
+          }}
         >
           🎨
         </button>
-
         {showColors && (
           <div className='color-menu'>
-            <button className='color-swatch color-yellow' onClick={() => applyColor('#facc15')} />
-            <button className='color-swatch color-green' onClick={() => applyColor('#22c55e')} />
-            <button className='color-swatch color-red' onClick={() => applyColor('#ef4444')} />
-            <button className='color-swatch color-blue' onClick={() => applyColor('#3b82f6')} />
             <button
+              type='button'
+              className='color-swatch color-yellow'
+              onClick={() => applyColor('#facc15')}
+            />
+            <button
+              type='button'
+              className='color-swatch color-green'
+              onClick={() => applyColor('#22c55e')}
+            />
+            <button
+              type='button'
+              className='color-swatch color-red'
+              onClick={() => applyColor('#ef4444')}
+            />
+            <button
+              type='button'
+              className='color-swatch color-blue'
+              onClick={() => applyColor('#3b82f6')}
+            />
+            <button
+              type='button'
               className='color-swatch color-none'
               onClick={() => applyColor('')}
               title='Remover cor'
@@ -114,13 +149,13 @@ export function BaseEditor({
         editor.setEditorState(parsed);
         return;
       }
-
       const root = $getRoot();
       root.clear();
-
-      const paragraph = $createParagraphNode();
-      paragraph.append($createTextNode(plainValue ?? ''));
-      root.append(paragraph);
+      if (plainValue && plainValue.trim() !== '') {
+        const paragraph = $createParagraphNode();
+        paragraph.append($createTextNode(plainValue));
+        root.append(paragraph);
+      }
     },
   };
 
@@ -136,9 +171,7 @@ export function BaseEditor({
           placeholder={<span className='placeholder'>{placeholder}</span>}
           ErrorBoundary={LexicalErrorBoundary}
         />
-
         <HistoryPlugin />
-
         <OnChangePlugin
           onChange={(editorState) => {
             const richJson = JSON.stringify(editorState);

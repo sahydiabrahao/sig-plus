@@ -18,16 +18,15 @@
   text-decoration: underline;
 }
 
-.placeholder {
-  color: $textMutedLight;
-  opacity: 0.6;
-  pointer-events: none;
-  font-size: $fontSizeSm;
+.lexical-details-wrapper {
+  position: relative;
+  padding-right: 20px;
 }
 
 .lexical-content-editable {
   padding: 8px;
-  min-height: 100px;
+  padding-top: 0px;
+  min-height: 42px;
   font-size: $fontSizeSm;
   color: $textDark;
   outline: none;
@@ -38,9 +37,15 @@
   border-color: $hoverMenuText;
 }
 
-.lexical-details-wrapper {
-  position: relative;
-  padding-right: 20px;
+.placeholder {
+  color: $textDark;
+  opacity: 0.6;
+  pointer-events: none;
+  font-size: $fontSizeSm;
+
+  position: absolute;
+  top: 0px;
+  left: 8px;
 }
 
 .lexical-toolbar-vertical {
@@ -49,7 +54,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 8px;
+  gap: 2px;
 
   button {
     background: #ffffff;
