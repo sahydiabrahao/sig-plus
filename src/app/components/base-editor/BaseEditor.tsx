@@ -12,6 +12,7 @@ import { $getSelection, $isRangeSelection } from 'lexical';
 import { LinkPlugin, ActiveLinkData } from '@/app/components';
 import { lexicalTheme } from './style/theme';
 import './style/theme.scss';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   plainValue: string;
@@ -25,6 +26,23 @@ type Props = {
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
+  const [showColors, setShowColors] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowColors(false);
+      }
+    }
+
+    if (showColors) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showColors]);
 
   const applyColor = (color: string) => {
     editor.update(() => {
@@ -33,6 +51,7 @@ function ToolbarPlugin() {
         $patchStyleText(selection, { color });
       }
     });
+    setShowColors(false);
   };
 
   return (
@@ -40,18 +59,40 @@ function ToolbarPlugin() {
       <button onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')}>
         <b>B</b>
       </button>
+
       <button onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')}>
         <i>I</i>
       </button>
+
       <button onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')}>U</button>
-      <button className='color-swatch color-yellow' onClick={() => applyColor('#facc15')} />
-      <button className='color-swatch color-green' onClick={() => applyColor('#22c55e')} />
-      <button className='color-swatch color-red' onClick={() => applyColor('#ef4444')} />
-      <button className='color-swatch color-blue' onClick={() => applyColor('#3b82f6')} />
-      <button className='color-swatch color-none' onClick={() => applyColor('')} />
+
+      <div className='color-dropdown' ref={dropdownRef}>
+        <button
+          className='color-trigger'
+          type='button'
+          onClick={() => setShowColors((prev) => !prev)}
+        >
+          🎨
+        </button>
+
+        {showColors && (
+          <div className='color-menu'>
+            <button className='color-swatch color-yellow' onClick={() => applyColor('#facc15')} />
+            <button className='color-swatch color-green' onClick={() => applyColor('#22c55e')} />
+            <button className='color-swatch color-red' onClick={() => applyColor('#ef4444')} />
+            <button className='color-swatch color-blue' onClick={() => applyColor('#3b82f6')} />
+            <button
+              className='color-swatch color-none'
+              onClick={() => applyColor('')}
+              title='Remover cor'
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
 export function BaseEditor({
   plainValue,
   richValue,
