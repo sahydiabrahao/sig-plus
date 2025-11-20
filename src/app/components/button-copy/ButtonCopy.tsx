@@ -1,4 +1,4 @@
-import { ButtonText } from '@/app/components/button-text/ButtonText';
+import { ButtonText } from '@/app/components';
 import './ButtonCopy.scss';
 
 function copy(text: string) {

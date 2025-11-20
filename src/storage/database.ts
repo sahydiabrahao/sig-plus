@@ -3,7 +3,7 @@ import { CaseStatus } from '@/types/json-default';
 const DB_NAME = 'investigate-fs';
 const STORE_HANDLES = 'handles';
 const KEY = 'rootDir';
-const DB_VERSION = 2;
+const DB_VERSION = 1;
 const STORE_STATUS = 'case-status';
 
 function openDb(): Promise<IDBDatabase> {

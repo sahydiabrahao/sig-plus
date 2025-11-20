@@ -3,6 +3,7 @@ export type CaseStatus = 'null' | 'waiting' | 'completed' | 'urgent' | 'review';
 export interface CaseRecord {
   id: string;
   target: string;
+  targetRich?: string | null;
   details: string;
   detailsRich?: string | null;
   linkFiles?: string[];
@@ -14,7 +15,7 @@ export interface CaseMetadata {
   crime: string;
   victim: string;
   date: string;
-  resume: string;
+  notes: string;
   status: CaseStatus;
 }
 
@@ -29,7 +30,7 @@ export type CaseSummary = {
   crime: string;
   victim: string;
   date: string;
-  resume: string;
+  notes: string;
   status: CaseStatus;
 
   folderPath: string;
@@ -42,7 +43,9 @@ export function createEmptyRecord(): CaseRecord {
   return {
     id: crypto.randomUUID(),
     target: '',
+    targetRich: null,
     details: '',
+    detailsRich: null,
     linkFiles: [],
   };
 }
@@ -55,7 +58,7 @@ export function createNewCase(caseId: string): CaseJson {
       crime: 'FATO',
       victim: 'NOME',
       date: 'XX/XX/XXXX',
-      resume: 'RESUMO',
+      notes: 'ANOTAÇÕES',
       status: 'null',
     },
     records: [createEmptyRecord()],
@@ -79,10 +82,6 @@ export function normalizeCaseJson(raw: Partial<CaseJson>): CaseJson {
           ...empty,
           ...r,
           id: r.id ?? crypto.randomUUID(),
-          target: r.target ?? '',
-          details: r.details ?? '',
-          detailsRich: r.detailsRich ?? null,
-          linkFiles: Array.isArray(r.linkFiles) ? r.linkFiles : empty.linkFiles,
         };
       })
     : base.records;

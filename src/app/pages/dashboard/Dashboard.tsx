@@ -302,12 +302,12 @@ export default function Dashboard() {
         </div>
 
         <label className='meta-field'>
-          <h2 className='meta-field__label'>Resumo:</h2>
+          <h2 className='meta-field__label'>Anotações:</h2>
           <textarea
             className='meta-field__text-area'
-            value={editableCase.case.resume}
+            value={editableCase.case.notes}
             onChange={(e) => {
-              handleMetadataChange('resume', e.target.value);
+              handleMetadataChange('notes', e.target.value);
               autoResize(e.target);
             }}
             rows={1}
