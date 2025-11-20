@@ -9,6 +9,8 @@ import { LinkPlugin, ActiveLinkData, TextEditorToolbar } from '@/app/components'
 import { THEME } from './theme';
 import './TextEditor.scss';
 
+type TextFormat = 'bold' | 'italic' | 'underline';
+
 type Props = {
   plainValue: string;
   richValue?: string | null;
@@ -17,6 +19,7 @@ type Props = {
   className?: string;
   showToolbar?: boolean;
   onActiveLinkChange?: (data: ActiveLinkData | null) => void;
+  defaultFormat?: TextFormat[];
 };
 
 export function TextEditor({
@@ -27,6 +30,7 @@ export function TextEditor({
   className,
   showToolbar,
   onActiveLinkChange,
+  defaultFormat,
 }: Props) {
   const initialConfig = {
     namespace: 'record-editor',
@@ -40,11 +44,21 @@ export function TextEditor({
         editor.setEditorState(parsed);
         return;
       }
+
       const root = $getRoot();
       root.clear();
+
       if (plainValue && plainValue.trim() !== '') {
         const paragraph = $createParagraphNode();
-        paragraph.append($createTextNode(plainValue));
+        const textNode = $createTextNode(plainValue);
+
+        if (defaultFormat?.length) {
+          defaultFormat.forEach((format) => {
+            textNode.toggleFormat(format);
+          });
+        }
+
+        paragraph.append(textNode);
         root.append(paragraph);
       }
     },

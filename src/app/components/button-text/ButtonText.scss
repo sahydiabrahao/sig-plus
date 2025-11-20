@@ -5,60 +5,105 @@
   align-items: center;
   justify-content: center;
 
-  padding: $s6 $s12;
   border-radius: $s6;
   cursor: pointer;
-
-  font-size: $fontSizeMd;
   font-weight: $fontWeightRegular;
+
+  background: $backgroundWhite;
+  color: $textDark;
+  border: 1px solid $grayLight;
 
   transition:
     background $transition,
-    border-color $transition,
-    transform $transition;
+    box-shadow $transition,
+    transform $transition,
+    border-color $transition;
 
-  &--filled {
-    background: $buttonDark;
-    color: $textLight;
-    border: none;
-
-    &:hover {
-      background: $hoverDark;
-    }
-  }
-
-  &--outline {
-    background: transparent;
-    border: 1px solid $buttonDark;
-    color: $textDark;
-
-    &:hover {
-      background: $hoverLight;
-      border-color: $buttonDark;
-    }
+  &:hover {
+    background: $backgroundWhite;
+    border-color: $gray;
+    transform: translateY(-1px);
+    box-shadow: $shadow;
   }
 
   &:active {
-    transform: scale(0.97);
+    transform: translateY(0);
+    box-shadow: none;
   }
 
   &:disabled {
     opacity: 0.4;
     cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.button-text--default {
+  background: $backgroundWhite;
+  color: $textDark;
+  border: 1px solid $grayLight;
+
+  &:hover {
+    background: $backgroundWhite;
+    border-color: $gray;
+    transform: translateY(-1px);
+    box-shadow: $shadow;
   }
 
-  &--sm {
-    font-size: $fontSizeSm;
-    padding: $s4 $s8;
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+.button-text--filled {
+  background: $buttonDark;
+  color: $textLight;
+  border: 1px solid $buttonDark;
+
+  &:hover {
+    background: $hoverDark;
+    border-color: $buttonDark;
+    transform: translateY(-1px);
+    box-shadow: $shadow;
   }
 
-  &--md {
-    font-size: $fontSizeMd;
-    padding: $s6 $s12;
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+.button-text--outline {
+  background: transparent;
+  color: $textDark;
+  border: 1px solid $buttonDark;
+
+  &:hover {
+    background: $hoverLight;
+    border-color: $buttonDark;
+    transform: translateY(-1px);
+    box-shadow: $shadow;
   }
 
-  &--lg {
-    font-size: $fontSizeLg;
-    padding: $s8 $s14;
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
   }
+}
+
+.button-text--sm {
+  height: $s24;
+  font-size: $fontSizeSm;
+}
+
+.button-text--md {
+  height: $s32;
+  font-size: $fontSizeMd;
+}
+
+.button-text--lg {
+  height: $s40;
+  font-size: $fontSizeLg;
 }

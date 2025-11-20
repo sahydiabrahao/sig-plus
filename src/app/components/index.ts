@@ -11,6 +11,5 @@ export * from './tree-view/TreeView';
 export * from './sidebar/Sidebar';
 export * from './case-card/CaseCard';
 export * from './text-editor/TextEditor';
-export * from './text-editor-with-toolbar/TextEditorWithToolbar';
 export * from './link-plugin/LinkPlugin';
 export * from './text-editor-toolbar/TextEditorToolbar';

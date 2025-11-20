@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CaseRecord } from '@/types/json-default';
-import { ButtonText, TextEditorWithToolbar } from '@/app/components';
+import { ButtonText, TextEditor } from '@/app/components';
 import './RecordCard.scss';
 
 type RecordCardProps = {
@@ -45,9 +45,6 @@ export function RecordCard({
     },
     [record, onChange]
   );
-
-  const handleTarget = (e: React.ChangeEvent<HTMLInputElement>) =>
-    update({ target: e.target.value });
 
   useEffect(() => {
     const matches = record.details.match(/\[🔗\]/g) ?? [];
@@ -143,20 +140,21 @@ export function RecordCard({
   return (
     <article className='record-card' ref={containerRef}>
       <div className='record-card__header'>
-        <h2 className='record-card__label'>#</h2>
-
-        <input
-          className='record-card__target'
-          value={record.target}
-          onChange={handleTarget}
-          placeholder='Ex: NOME...'
-        />
+        <div className='record-card__target'>
+          <TextEditor
+            plainValue={record.target}
+            richValue={record.targetRich}
+            onChange={(plain, rich) => update({ target: plain, targetRich: rich })}
+            placeholder='Ex: # NOME...; Use Ctrl+B para negrito.'
+            defaultFormat={['bold']}
+          />
+        </div>
 
         <div className='record-card__header-actions'>
           <ButtonText
             text={collapsed ? '▾' : '▴'}
             size='sm'
-            variant='outline'
+            variant='default'
             onClick={() => setCollapsed((prev) => !prev)}
           />
 
@@ -164,7 +162,7 @@ export function RecordCard({
             <ButtonText
               text='⋯'
               size='sm'
-              variant='outline'
+              variant='default'
               onClick={() => setMenuOpen((prev) => !prev)}
             />
 
@@ -203,12 +201,13 @@ export function RecordCard({
 
       {!collapsed && (
         <div className='record-card__section'>
-          <TextEditorWithToolbar
+          <TextEditor
             plainValue={record.details}
             richValue={record.detailsRich}
             onChange={(plain, rich) => update({ details: plain, detailsRich: rich })}
             placeholder='[✔️] # TÍTULO: Descrição; Use [🔗] para links.'
             onActiveLinkChange={setActiveLink}
+            showToolbar
           />
         </div>
       )}

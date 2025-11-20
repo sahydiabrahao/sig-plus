@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND } from 'lexical';
+import { $getSelection, $isRangeSelection } from 'lexical';
 import { useState, useRef, useEffect } from 'react';
 import { $patchStyleText } from '@lexical/selection';
 import './TextEditorToolbar.scss';
@@ -36,38 +36,8 @@ export function TextEditorToolbar() {
     });
   };
 
-  const toggleFormat = (format: 'bold' | 'italic' | 'underline') => {
-    editor.dispatchCommand(FORMAT_TEXT_COMMAND, format);
-  };
-
   return (
     <div className='text-editor-toolbar' ref={toolbarRef}>
-      <div className='text-editor-toolbar__dropdown text-editor-toolbar__dropdown--format'>
-        <button
-          type='button'
-          className='text-editor-toolbar__trigger text-editor-toolbar__trigger--format'
-          onClick={() => {
-            setShowFormats((prev) => !prev);
-            setShowColors(false);
-          }}
-        >
-          <span>𝘼</span>
-        </button>
-        {showFormats && (
-          <div className='text-editor-toolbar__menu text-editor-toolbar__menu--format'>
-            <button type='button' onClick={() => toggleFormat('bold')}>
-              <b>B</b>
-            </button>
-            <button type='button' onClick={() => toggleFormat('italic')}>
-              <i>I</i>
-            </button>
-            <button type='button' onClick={() => toggleFormat('underline')}>
-              U
-            </button>
-          </div>
-        )}
-      </div>
-
       <div className='text-editor-toolbar__dropdown'>
         <button
           className='text-editor-toolbar__trigger'

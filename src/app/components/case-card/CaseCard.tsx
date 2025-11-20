@@ -1,23 +1,14 @@
 import { ButtonStatus } from '@/app/components';
-import { CaseStatus } from '@/types/json-default';
+import { CaseSummary } from '@/types/json-default';
 import './CaseCard.scss';
 
 interface CaseCardProps {
-  summary: {
-    id: string;
-    crime: string;
-    victim: string;
-    date: string;
-    resume?: string;
-    status: CaseStatus;
-    handle: FileSystemFileHandle;
-    fileName: string;
-  };
+  summary: CaseSummary;
   onSelect: (handle: FileSystemFileHandle) => void;
 }
 
 export const CaseCard = ({ summary, onSelect }: CaseCardProps) => {
-  const { id, crime, victim, date, resume, status, handle } = summary;
+  const { id, crime, victim, date, notes, status, handle } = summary;
 
   return (
     <button className='case-card' onClick={() => onSelect(handle)}>
@@ -42,7 +33,7 @@ export const CaseCard = ({ summary, onSelect }: CaseCardProps) => {
           </span>
         </div>
 
-        {resume && <span className='case-card__resume'>{resume}</span>}
+        {notes && <span className='case-card__notes'>{notes}</span>}
       </div>
     </button>
   );

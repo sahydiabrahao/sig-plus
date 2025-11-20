@@ -4,7 +4,7 @@ interface ButtonTextProps {
   text: string;
   onClick?: () => void;
   size?: 'sm' | 'md' | 'lg';
-  variant?: 'filled' | 'outline';
+  variant?: 'default' | 'filled' | 'outline';
   disabled?: boolean;
 }
 

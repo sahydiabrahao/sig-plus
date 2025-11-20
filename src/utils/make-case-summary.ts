@@ -15,7 +15,7 @@ export function makeCaseSummary(params: {
     crime: json.case.crime,
     victim: json.case.victim,
     date: json.case.date,
-    resume: json.case.resume,
+    notes: json.case.notes,
     status: json.case.status,
 
     folderPath,
