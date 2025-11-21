@@ -76,13 +76,13 @@
 }
 
 .button-text--outline {
-  background: transparent;
+  background: $backgroundWhite;
   color: $textDark;
-  border: 1px solid $buttonDark;
+  border: 1px solid $grayLight;
 
   &:hover {
-    background: $hoverLight;
-    border-color: $buttonDark;
+    background: $backgroundWhite;
+    border-color: $gray;
     transform: translateY(-1px);
     box-shadow: $shadow;
   }
