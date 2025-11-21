@@ -146,7 +146,6 @@ export function RecordCard({
             richValue={record.targetRich}
             onChange={(plain, rich) => update({ target: plain, targetRich: rich })}
             placeholder='Ex: # NOME...; Use Ctrl+B para negrito.'
-            defaultFormat={['bold']}
           />
         </div>
 
